@@ -1,7 +1,6 @@
 #!/bin/bash
-#!/bin/bash
 
-# Arch Linux instalace 
+# Arch Linux instalace base
 
 ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime
 
