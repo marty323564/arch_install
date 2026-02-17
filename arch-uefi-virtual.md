@@ -1,76 +1,103 @@
-# Arch Linux - UEFI on Virtual Machine
+---
+#### Arch Linux - UEFI on Virtual Machine
+---
 
-### pro potřeby instalace - není nutné
-# setfont - nastavení písma
-setfont Lat2-Terminus16
+pro potřeby instalace - není nutné
 
-### pro potřeby instalace - není nutné
-## keymap - české rozložení klávesnice
-keymap cz-qwertz
+*setfont* - nastavení písma
 
-# přehled disků - kam se bude arch linux instalovat
-lsblk
+`setfont Lat2-Terminus16`
 
-# v případě virtuálního stroje je to u mne zpravidla 'vda'
-# tento postup tedy pracuje s diskem 'vda' a swapování je zvoleno do souboru
+pro potřeby instalace - není nutné
 
-fdisk /dev/vda
+*keymap* - české rozložení klávesnice
+
+`keymap cz-qwertz`
+
+přehled disků - kam se bude arch linux instalovat
+
+`lsblk`
+
+v případě virtuálního stroje je to u mne zpravidla *vda*
+
+tento postup tedy pracuje s diskem *vda* a swapování je zvoleno do souboru
+
+`fdisk /dev/vda`
+
 1. oddíl = +300M typ 'uefi' (v fdisku jako synonymum - alias) bude 'vda1'
 2. oddíl = zbytek diskového prostoru - typ je implicitně 'linux' bude 'vda2'
 
 
-# formátování oddílů
-# pro UEFI se používá 'fat' formát
-mkfs.fat -F32 /dev/vda1
+formátování oddílů
 
-# běžný linuxový oddíl - ext4
-mkfs -t ext4 /dev/vda2
+formátování boot oddílu
 
-# mounting
-mount /dev/vda2 /mnt
-mkdir -p /mnt/boot/efi
-mount /dev/vda1 /mnt/boot/efi
+`mkfs.fat -F32 /dev/vda1`
 
+běžný linuxový oddíl - ext4
 
-# install base packages
-pacstrap /mnt pacstrap /mnt base linux linux-firmware nano
+`mkfs -t ext4 /dev/vda2`
 
-# generate file system table
-genfstab -U /mnt >> /mnt/etc/fstab
+připojování diskových oddílů:
 
-# chroot
-arch-chroot /mnt
+`mount /dev/vda2 /mnt`
 
-# swapfile
-fallocate -l 2GB /swapfile
-chmod 600 /swapfile
-mkswap /swapfile && swapon /swapfile
+`mkdir -p /mnt/boot/efi`
 
-# edit `fstab` --- > 
-nano /etc/fstab
+`mount /dev/vda1 /mnt/boot/efi`
 
-# swapfile
-/swapfile none  swap  defaults  0 0
+instalace základních balíčků:
 
-# timezone
-ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localetime
+`pacstrap /mnt base linux linux-firmware nano`
 
-# synchronize hardware-clock
-hwclock --systohc
+generování tabulky diskových oddílů:
 
-# edit locale.gen:
-nano /etc/locale.gen
+`genfstab -U /mnt >> /mnt/etc/fstab`
 
-# Uncomment, save and exit
-cs_CZ.UTF-8
+chroot
 
-# Generate the locale
-locale-gen
+`arch-chroot /mnt`
 
-# edit file:
+tvorba swapovacího souboru - swapfile
+
+`fallocate -l 2GB /swapfile`
+
+`chmod 600 /swapfile`
+
+`mkswap /swapfile && swapon /swapfile`
+
+vytvořený swapovavcí soubor je potřeba zahrnou do tabulky diskových oddílů:
+
+`nano /etc/fstab`
+
+`# swapfile`
+
+`/swapfile none  swap  defaults  0 0`
+
+nastavení časové zóny - Česká republika, symbolický link:
+
+`ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localetime`
+
+synchronizace hardware hodin
+
+`hwclock --systohc`
+
+generování *locales*
+
+`nano /etc/locale.gen`
+
+odkomentovat řádek:
+
+`cs_CZ.UTF-8`
+
+spustit generování *locales*
+
+`locale-gen`
+
+edit file:
 nano /etc/locale.conf
 
-# insert, save and exit
+insert, save and exit
 LANG=cs_CZ.UTF-8
 
 # set keyboard layout
@@ -78,19 +105,20 @@ nano /etc/vconsole.conf
 KEYMAP=cz-qwertz
 FONT=Lat2-Terminus16
 
-# set hostname - edit file:
+set hostname - edit file:
 nano /etc/hostname
 archlinux
 
-# set hosts - edit file:
+set hosts - edit file:
 nano /etc/hosts
-# Set hosts, save and exit
+
+Set hosts, save and exit
 127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   archlinux.localdomain	archlinux
 
-# set root password
-passwd
+set root password
+`code` passwd
 
 # install remaining base packages
 pacman -S grub efibootmgr networkmanager sudo git iw wpa_supplicant os-prober \
@@ -127,6 +155,7 @@ sudo pacman -S openssh
 sudo systemctl enable --now sshd
 sudo systemctl status sshd
 
-# reflector
-sudo reflector --country Czechia --age 12 --protocol https --sort rate \
-  --save /etc/pacman.d/mirrorlist
+**reflector**
+
+`sudo reflector --country Czechia --age 12 --protocol https --sort rate \
+  --save /etc/pacman.d/mirrorlist`
