@@ -38,7 +38,3 @@ grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager
 
 exit
-
-umount -R /mnt
-
-reboot
