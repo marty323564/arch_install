@@ -146,7 +146,10 @@ systemctl enable reflector.timer
 systemctl enable sshd
 ```
 ```
+# bezpečnostní aktualizace pro procesor
 pacman -S intel-ucode
+# znovu vygenerovat
+grub-mkconfig -o /boot/grub/grub.cfg
 ```
 ```
 # vytvožení uživatelského účtu a hesla
