@@ -4,20 +4,21 @@
 
 ```
 # pro potřeby instalace - není nutné
+# výběr fontu s podporou národního prostředí - 'setfont'
 setfont Lat2-Terminus16
 ```
 ```
 # pro potřeby instalace - není nutné
-keymap - české rozložení klávesnice
+# umístění znakových sad a písem v /usr/share/kbd/keymaps/
+# české rozložení klávesnice - 'keymap'
 keymap cz-qwertz
 ```
 ```
-# přehled disků - kam se bude arch linux instalovat
-
+# přehled disků
 lsblk
+
 # v případě virtuálního stroje je to u mne zpravidla *vda*
 # tento postup tedy pracuje s diskem *vda* a swapování je zvoleno do souboru
-
 fdisk /dev/vda
 
 1. oddíl = +300M typ 'uefi' (v fdisku jako synonymum - alias) bude 'vda1'
@@ -25,11 +26,10 @@ fdisk /dev/vda
 ```
 ```
 # formátování oddílů
-
-# formátování boot oddílu
+# formátování boot oddílu (souborový formát 'fat')
 mkfs.fat -F32 /dev/vda1
 
-# běžný linuxový oddíl - ext4
+# formátování root oddílu (souborový formát 'ext4')
 mkfs -t ext4 /dev/vda2
 ```
 ```
@@ -57,7 +57,7 @@ fallocate -l 2GB /swapfile
 chmod 600 /swapfile
 mkswap /swapfile && swapon /swapfile
 
-# vytvořený swapovavcí soubor je potřeba zahrnou do tabulky diskových oddílů:
+# vytvořený swapovavcí soubor je potřeba zahrnout do tabulky diskových oddílů
 nano /etc/fstab
 
 # swapfile
@@ -68,39 +68,39 @@ nano /etc/fstab
 ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localetime
 ```
 ```
-# synchronizace hardware hodin
-hwclock --systohc
-```
-```
-# generování "locales"
+# generování 'locales'
 nano /etc/locale.gen
 # odkomentovat řádek:
 cs_CZ.UTF-8
 
-# spustit generování *locales*
+# spustit generování 'locales'
 locale-gen
 ```
 ```
-edit file:
+# uložení nastavení národního prostředí do souboru '/etc/locale.conf'
 nano /etc/locale.conf
-
-insert, save and exit
+# lokální nastavení
 LANG=cs_CZ.UTF-8
 
-# nastavení rozložení klkávesnice a fontu pro obrazovku terminálu
+# nastavení rozložení klávesnice a fontu pro obrazovku terminálu
 nano /etc/vconsole.conf
-# zadat hodnoty (zde záleží na osobních potřebách a preferncích
+
+# zadat požadované hodnoty (zde záleží na osobních potřebách a preferencích)
 KEYMAP=cz-qwertz
 FONT=Lat2-Terminus16
 ```
 ```
+# synchronizace hardware hodin
+hwclock --systohc
+```
+```
 # nastavení jména počítače (hostname)
 nano /etc/hostname
-# do prázdného souboru uvést požadovaná název
+# do prázdného souboru uvést požadovaný název
 archlinux
 ```
 ```
-# nastavení souboru /etc/hosts:
+# nastavení hodnot v souboru /etc/hosts:
 nano /etc/hosts
 
 # dle potřeb - zde příklad
@@ -115,19 +115,20 @@ passwd
 ```
 # instalace základních balíčků - opět podle potřeb a preferencí
 pacman -S grub efibootmgr networkmanager sudo git iw wpa_supplicant os-prober \
-base-devel linux-headers reflector man-db man-pages
+base-devel linux-headers reflector man-db man-pages openssh
 ```
 ```
-# install grub-bootloader
+# instalace zavaděče systému - GRUB
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 
-# Create grub bootloader config
+# vytvožení konfiguračního souboru pro zavaděč GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 ```
 # nastavení základních služeb v systemd
 systemctl enable NetworkManager
 systemctl enable reflector.timer
+systemctl enable sshd
 ```
 ```
 pacman -S intel-ucode
@@ -137,24 +138,21 @@ pacman -S intel-ucode
 useradd -m -G wheel -s /bin/bash martin
 passwd martin
 ```
-
+```
 # add user to sudoers
 EDITOR=nano visudo
 
 # Uncomment
 %wheel ALL=(ALL) ALL
-
+```
+```
 # exit, unmount and reboot system
 exit
 umount -R /mnt
 reboot
-
-# ssh
-sudo pacman -S openssh
-sudo systemctl enable --now sshd
-sudo systemctl status sshd
-
-**reflector**
-
-`sudo reflector --country Czechia --age 12 --protocol https --sort rate \
-  --save /etc/pacman.d/mirrorlist`
+```
+```
+# nastavení zrcadel
+sudo reflector --country Czechia --age 12 --protocol https --sort rate \
+  --save /etc/pacman.d/mirrorlist
+```
