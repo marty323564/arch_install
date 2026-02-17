@@ -66,7 +66,7 @@ nano /etc/fstab
 ```
 ```
 # nastavení časové zóny - Česká republika, symbolický link:
-ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localetime
+ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime
 ```
 ```
 # generování 'locales'
@@ -101,7 +101,7 @@ nano /etc/hostname
 archlinux
 ```
 ```
-# nastavení hodnot v souboru /etc/hosts:
+# nastavení hodnot v souboru /etc/hosts
 nano /etc/hosts
 
 # dle potřeb - zde příklad
@@ -118,7 +118,7 @@ passwd
 pacman -S grub efibootmgr networkmanager sudo git iw wpa_supplicant os-prober \
 base-devel linux-headers reflector man-db man-pages openssh
 
-# grub
+# grub                   
 # efibootmgr 
 # networkmanager
 # sudo
