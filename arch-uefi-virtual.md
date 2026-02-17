@@ -40,7 +40,8 @@ mkdir -p /mnt/boot/efi
 mount /dev/vda1 /mnt/boot/efi
 ```
 ```
-# instalace základních balíčků:
+# instalace základních balíčků
+# zde osobně dávám jen to nejnutnější k chodu systému a zbytek dle okolností
 pacstrap /mnt base linux linux-firmware nano
 ```
 ```
@@ -57,7 +58,7 @@ fallocate -l 2GB /swapfile
 chmod 600 /swapfile
 mkswap /swapfile && swapon /swapfile
 
-# vytvořený swapovavcí soubor je potřeba zahrnout do tabulky diskových oddílů
+# vytvořený swapovací soubor je potřeba zahrnout do tabulky diskových oddílů
 nano /etc/fstab
 
 # swapfile
@@ -113,9 +114,23 @@ nano /etc/hosts
 passwd
 ```
 ```
-# instalace základních balíčků - opět podle potřeb a preferencí
+# instalace základních balíčků (opět podle aktuálních potřeb a preferencí)
 pacman -S grub efibootmgr networkmanager sudo git iw wpa_supplicant os-prober \
 base-devel linux-headers reflector man-db man-pages openssh
+
+# grub
+# efibootmgr 
+# networkmanager
+# sudo
+# git
+# iw
+# os-prober
+# base-devel
+# linux-headers
+# reflector
+# man-db
+# man-pages
+# openssh
 ```
 ```
 # instalace zavaděče systému - GRUB
