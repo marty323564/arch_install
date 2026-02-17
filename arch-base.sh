@@ -22,7 +22,7 @@ echo "::1       localhost" >> /etc/hosts
 
 echo "127.0.1.1 arch.localdomain arch" >> /etc/hosts
 
-password root
+password
 
 useradd -m -G wheel -s /bin/bash martin
 
@@ -37,6 +37,8 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 systemctl enable NetworkManager
 
-pacman -S intel-ucode
+sudo pacman -S intel-ucode
+
+grub-mkconfig -o /boot/grub/grub.cfg
 
 exit
