@@ -17,12 +17,12 @@ keymap cz-qwertz
 # přehled disků
 lsblk
 
-# v případě virtuálního stroje je to u mne zpravidla *vda*
-# tento postup tedy pracuje s diskem *vda* a swapování je zvoleno do souboru
+# v případě virtuálního stroje je to zpravidla 'vda1'
+# tento postup tedy pracuje s diskem 'vda' a swapování je zvoleno do souboru
 fdisk /dev/vda
 
-1. oddíl = +300M typ 'uefi' (v fdisku jako synonymum - alias) bude 'vda1'
-2. oddíl = zbytek diskového prostoru - typ je implicitně 'linux' bude 'vda2'
+1. oddíl = +300M typ 'uefi'
+2. oddíl = zbytek diskového prostoru - typ 'linux'
 ```
 ```
 # formátování oddílů
