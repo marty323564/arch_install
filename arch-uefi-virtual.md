@@ -9,9 +9,10 @@ setfont Lat2-Terminus16
 ```
 ```
 # pro potřeby instalace - není nutné
-# umístění znakových sad a písem v /usr/share/kbd/keymaps/
-# české rozložení klávesnice - 'keymap'
-keymap cz-qwertz
+# localectl list-locales | grep ^cs
+# localectl list-keymaps | grep ^cz
+# české rozložení klávesnice
+localectl set-keymap cz-qwertz
 ```
 ```
 # přehled disků
