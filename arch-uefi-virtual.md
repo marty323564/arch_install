@@ -115,8 +115,7 @@ passwd
 ```
 ```
 # instalace základních balíčků (opět podle aktuálních potřeb a preferencí)
-pacman -S grub efibootmgr networkmanager sudo git iw wpa_supplicant os-prober \
-base-devel linux-headers reflector man-db man-pages openssh
+pacman -S grub efibootmgr networkmanager sudo git base-devel linux-headers reflector man-db man-pages openssh
 
 # grub                   
 # efibootmgr 
