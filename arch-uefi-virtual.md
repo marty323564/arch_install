@@ -1,7 +1,10 @@
 ---
 #### Arch Linux - UEFI on Virtual Machine
 ---
-
+```
+# povoluje nebo zakazuje synchronizaci síťového času (NTP) v systémech Linux založených na systemd
+timedatectl set-ntp true
+```
 ```
 # pro potřeby instalace - není nutné
 # výběr fontu s podporou národního prostředí - 'setfont'
